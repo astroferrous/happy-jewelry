@@ -3,6 +3,7 @@ package com.happyjewelry;
 import net.runelite.api.events.MenuEntryAdded;
 import net.runelite.api.MenuEntry;
 import net.runelite.api.ChatMessageType;
+import net.runelite.client.RuneLite;
 import net.runelite.client.chat.ChatMessageManager;
 import com.google.inject.Provides;
 import net.runelite.api.Client;
@@ -13,15 +14,20 @@ import net.runelite.client.plugins.Plugin;
 import net.runelite.client.plugins.PluginDescriptor;
 import javax.sound.sampled.*;
 import javax.inject.Inject;
+import java.io.File;
 import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.BufferedInputStream;
 
 @PluginDescriptor(
 		name = "Happy Jewelry",
-		description = "Plays a sound when jewelry is rubbed",
+		description = "Plays a sound when jewelry is rubbed/tickled",
 		tags = {"jewelry"}
 )
 
 public class HappyJewelryPlugin extends Plugin {
+
+	public static final File HAPPY_JEWELRY_FOLDER = new File(RuneLite.RUNELITE_DIR, "happy-jewelry");
 
 	@Inject
 	private ChatMessageManager chatMessageManager;
@@ -78,11 +84,13 @@ public class HappyJewelryPlugin extends Plugin {
 	}
 
 	private void playCustomSound() {
-		try (InputStream soundFile = getClass().getResourceAsStream("/sounds/happyjewelrysound.wav")) {
-			if (soundFile == null) {
-				throw new IllegalArgumentException("Sound file not found!");
-			}
+		final File f = new File(HappyJewelryPlugin.HAPPY_JEWELRY_FOLDER, "giggle.wav");
 
+		if (!f.exists()) {
+			throw new IllegalArgumentException("Sound file not found!");
+		}
+
+		try (InputStream soundFile = new BufferedInputStream(new FileInputStream(f))) { // Wrap with BufferedInputStream
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
