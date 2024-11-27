@@ -18,6 +18,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
+import java.nio.file.Files;
 
 @PluginDescriptor(
 		name = "Happy Jewelry",
@@ -40,7 +41,22 @@ public class HappyJewelryPlugin extends Plugin {
 
 	@Override
 	protected void startUp() throws Exception {
-		// Code to run when the plugin starts
+		File soundFile = new File(HAPPY_JEWELRY_FOLDER, "giggle.wav");
+
+		// Ensure the folder exists
+		if (!HAPPY_JEWELRY_FOLDER.exists()) {
+			HAPPY_JEWELRY_FOLDER.mkdirs();
+		}
+
+		// Copy file if it doesn't exist
+		if (!soundFile.exists()) {
+			try (InputStream inputStream = getClass().getResourceAsStream("/sounds/giggle.wav")) { // Load from resources
+				if (inputStream == null) {
+					throw new IllegalArgumentException("Resource giggle.wav not found!");
+				}
+				Files.copy(inputStream, soundFile.toPath());
+			}
+		}
 	}
 
 	@Override
