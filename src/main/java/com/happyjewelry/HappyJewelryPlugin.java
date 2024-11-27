@@ -45,9 +45,7 @@ public class HappyJewelryPlugin extends Plugin {
 	}
 
 	private void playCustomSound() {
-		try {
-			// Load the sound file from resources
-			InputStream soundFile = getClass().getResourceAsStream("/sounds/happyjewelrysound.wav");
+		try (InputStream soundFile = getClass().getResourceAsStream("/sounds/happyjewelrysound.wav")) {
 			if (soundFile == null) {
 				throw new IllegalArgumentException("Sound file not found!");
 			}
@@ -55,6 +53,14 @@ public class HappyJewelryPlugin extends Plugin {
 			AudioInputStream audioInputStream = AudioSystem.getAudioInputStream(soundFile);
 			Clip clip = AudioSystem.getClip();
 			clip.open(audioInputStream);
+
+			// Add a listener to release resources when the sound finishes
+			clip.addLineListener(event -> {
+				if (event.getType() == LineEvent.Type.STOP) {
+					clip.close();
+				}
+			});
+
 			clip.start(); // Play the sound
 
 		} catch (Exception e) {

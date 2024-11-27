@@ -18,14 +18,4 @@ public interface HappyJewelryConfig extends Config
         return true; // Default to enabled
     }
 
-    @ConfigItem(
-            keyName = "soundVolume",
-            name = "Sound Volume",
-            description = "Set the volume for the custom sound",
-            position = 2
-    )
-    default int soundVolume()
-    {
-        return 50; // Default volume level
-    }
 }
