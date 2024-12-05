@@ -19,6 +19,8 @@ import java.io.InputStream;
 import java.io.FileInputStream;
 import java.io.BufferedInputStream;
 import java.nio.file.Files;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @PluginDescriptor(
 		name = "Happy Jewelry",
@@ -29,6 +31,8 @@ import java.nio.file.Files;
 public class HappyJewelryPlugin extends Plugin {
 
 	public static final File HAPPY_JEWELRY_FOLDER = new File(RuneLite.RUNELITE_DIR, "happy-jewelry");
+
+	private static final Logger log = LoggerFactory.getLogger(HappyJewelryPlugin.class);
 
 	@Inject
 	private ChatMessageManager chatMessageManager;
@@ -121,7 +125,7 @@ public class HappyJewelryPlugin extends Plugin {
 			clip.start(); // Play the sound
 
 		} catch (Exception e) {
-			e.printStackTrace();
+			log.error("Oopsies!", e);
 		}
 	}
 
