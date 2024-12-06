@@ -22,6 +22,7 @@ import java.nio.file.Files;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 @PluginDescriptor(
 		name = "Happy Jewelry",
 		description = "Plays a sound when jewelry is rubbed/tickled",
